@@ -1,0 +1,64 @@
+| id_alumno | curso        | asignatura | calificacion |
+|-----------|--------------|------------|--------------|
+| 1         | Matemáticas  | Álgebra    | 85           |
+| 2         | Matemáticas  | Álgebra    | 90           |
+| 3         | Matemáticas  | Geometría  | 78           |
+| 4         | Ciencias     | Biología   | 88           |
+| 5         | Ciencias     | Biología   | 92           |
+| 6         | Ciencias     | Química    | 75           |
+| 7         | Matemáticas  | Geometría  | 88           |
+| 8         | Ciencias     | Química    | 82           |
+
+1. --------------------------------------------------------
+Promedio de Calificaciones por Curso
+
+SELECT curso, AVG(calificacion) AS promedio_calificaciones
+FROM calificaciones
+GROUP BY curso;
+
+Explicación: Se agrupan las filas por curso, y la función AVG(calificacion) calcula el
+promedio de las calificaciones en cada grupo.
+
+2. --------------------------------------------------------
+Número de Alumnos por Asignatura
+
+SELECT asignatura, COUNT(*) AS total_alumnos
+FROM calificaciones
+GROUP BY asignatura;
+
+Explicación: Se agrupan las filas por asignatura, y COUNT(*) cuenta cuántas filas (alumnos)
+hay en cada asignatura.
+
+3. --------------------------------------------------------
+Asignaturas con un Promedio Superior a 85
+
+SELECT asignatura, AVG(calificacion) AS promedio_calificaciones
+FROM calificaciones
+GROUP BY asignatura
+HAVING AVG(calificacion) > 85;
+
+Explicación: Primero se agrupan las filas por asignatura, se calcula el promedio de
+calificaciones, y luego se filtran los grupos con un promedio superior a 85 usando HAVING.
+
+4. --------------------------------------------------------
+Máxima Calificación por Curso y Asignatura
+
+SELECT curso, asignatura, MAX(calificacion) AS max_calificacion
+FROM calificaciones
+GROUP BY curso, asignatura;
+
+Explicación: Se agrupan las filas tanto por curso como por asignatura, y MAX(calificacion)
+devuelve la calificación más alta dentro de cada grupo.
+
+5. --------------------------------------------------------
+Asignaturas con Más de 1 Alumno con Calificaciones Mayores a 80
+
+SELECT asignatura, COUNT(*) AS total_alumnos
+FROM calificaciones
+WHERE calificacion > 80
+GROUP BY asignatura
+HAVING COUNT(*) > 1;
+
+Explicación: WHERE calificacion > 80 filtra las filas antes de agrupar, GROUP BY asignatura
+agrupa por asignatura, y HAVING COUNT(*) > 1 selecciona solo los grupos con más de un
+alumno.
