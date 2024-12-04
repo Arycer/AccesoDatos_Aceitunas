@@ -107,7 +107,13 @@ public class TrabajadorDAOImpl implements TrabajadorDAO {
     @Override
     public List<Trabajador> getTrabajadorByCuadrillaId(int id) {
         List<Trabajador> lista = new ArrayList<>();
-        String sql = "select t.* from Cuadrilla cuad,Trabajador t, Cuadrilla_Trabajador cuadt where cuadt.cuadrilla_id=cuad.id and cuadt.trabajador_id=t.id and cuad.id=?";
+        String sql = """
+            select t.*
+            from Cuadrilla c,Trabajador t, Cuadrilla_Trabajador rel
+            where rel.cuadrilla_id=c.id
+              and rel.trabajador_id=t.id
+              and c.id=?
+            """;
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             CuadrillaDAOImpl cuadrillaDAOImpl = new CuadrillaDAOImpl();
