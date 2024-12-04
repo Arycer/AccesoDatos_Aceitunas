@@ -20,13 +20,28 @@ public class AlmazaraDAOImpl implements AlmazaraDAO {
         String sql = "insert into Almazara (nombre,ubicacion,capacidad) values(?,?,?)";
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
+            connection.setAutoCommit(false);
+
             st.setString(1, al.getNombre());
             st.setString(2, al.getUbicacion());
             st.setDouble(3, al.getCapacidad());
 
             st.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                System.err.println("Error al hacer rollback: " + ex.getMessage());
+            }
+
             throw new RuntimeException(e);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.err.println("Error al hacer setAutoCommit(true): " + e.getMessage());
+            }
         }
     }
 
