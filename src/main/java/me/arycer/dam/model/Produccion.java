@@ -1,8 +1,7 @@
-package org.example.models;
+package me.arycer.dam.model;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement(name = "Produccion")
 public class Produccion {
@@ -18,18 +17,6 @@ public class Produccion {
     private String fecha;
     @XmlElement(name = "cantidadRecolectada")
     private double cantidadRecolectada;
-
-    @Override
-    public String toString() {
-        return "Produccion{" +
-                "id=" + id +
-                ", cuadrilla_id=" + cuadrilla_id +
-                ", olivar_id=" + olivar_id +
-                ", almazara_id=" + almazara_id +
-                ", fecha='" + fecha + '\'' +
-                ", cantidadRecolectada=" + cantidadRecolectada +
-                '}';
-    }
 
     public Produccion() {
     }
@@ -73,5 +60,17 @@ public class Produccion {
 
     public double getCantidadRecolectada() {
         return cantidadRecolectada;
+    }
+
+    @Override
+    public String toString() {
+        return "Produccion{" +
+                "id=" + id +
+                ", cuadrilla_id=" + cuadrilla_id +
+                ", olivar_id=" + olivar_id +
+                ", almazara_id=" + almazara_id +
+                ", fecha='" + fecha + '\'' +
+                ", cantidadRecolectada=" + cantidadRecolectada +
+                '}';
     }
 }

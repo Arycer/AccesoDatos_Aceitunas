@@ -1,13 +1,9 @@
-package org.example.models;
-
-import org.example.conexion.Conexion;
-import org.example.dao.AlmazaraDAO;
+package me.arycer.dam.model;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.sql.Connection;
-import java.util.List;
-@XmlRootElement (name = "Almazara")
+
+@XmlRootElement(name = "Almazara")
 public class Almazara {
     @XmlElement(name = "id")
     private int id;
@@ -19,16 +15,6 @@ public class Almazara {
     private double capacidad;
 
     public Almazara() {
-    }
-
-    @Override
-    public String toString() {
-        return "Almazara{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", ubicacion='" + ubicacion + '\'' +
-                ", capacidad=" + capacidad +
-                '}';
     }
 
     public Almazara(int id, String nombre, String ubicacion, double capacidad) {
@@ -58,5 +44,15 @@ public class Almazara {
 
     public double getCapacidad() {
         return capacidad;
+    }
+
+    @Override
+    public String toString() {
+        return "Almazara{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", ubicacion='" + ubicacion + '\'' +
+                ", capacidad=" + capacidad +
+                '}';
     }
 }

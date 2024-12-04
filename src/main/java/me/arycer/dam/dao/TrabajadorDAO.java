@@ -1,15 +1,19 @@
-package org.example.dao;
+package me.arycer.dam.dao;
 
-import org.example.models.Olivar;
-import org.example.models.Trabajador;
+import me.arycer.dam.model.Trabajador;
 
 import java.util.List;
 
 public interface TrabajadorDAO {
-    public void add(Trabajador t);
-    public void update(Trabajador t);
-    public void delete(int id);
-    public List<Trabajador> read();
-    public void asociarCuadTrab(int id_Cuad,int id_Trab);
-    List<Trabajador> getTrabajadorByCuadId(int id);
+    void add(Trabajador t);
+
+    void update(Trabajador t);
+
+    void delete(int id);
+
+    List<Trabajador> read();
+
+    void asociarCuadrillaTrabajador(int id_cuadrilla, int id_trabajador);
+
+    List<Trabajador> getTrabajadorByCuadrillaId(int id);
 }

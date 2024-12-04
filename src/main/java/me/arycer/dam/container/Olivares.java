@@ -1,6 +1,6 @@
-package org.example.Contenedores;
+package me.arycer.dam.container;
 
-import org.example.models.*;
+import me.arycer.dam.model.Olivar;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

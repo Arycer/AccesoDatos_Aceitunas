@@ -1,4 +1,4 @@
-package org.example.Contenedores;
+package me.arycer.dam.container;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -24,6 +24,9 @@ public class BaseDeDatos {
         this.trabajadores = trabajadores;
     }
 
+    public BaseDeDatos() {
+    }
+
     public Almazaras getAlmazaras() {
         return almazaras;
     }
@@ -42,9 +45,6 @@ public class BaseDeDatos {
 
     public Trabajadores getTrabajadores() {
         return trabajadores;
-    }
-
-    public BaseDeDatos() {
     }
 
     @Override

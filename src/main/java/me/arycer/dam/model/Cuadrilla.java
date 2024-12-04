@@ -1,9 +1,9 @@
-package org.example.models;
+package me.arycer.dam.model;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.util.List;
+
 @XmlRootElement(name = "Cuadrilla")
 public class Cuadrilla {
     @XmlElement(name = "id")
@@ -16,15 +16,6 @@ public class Cuadrilla {
     private transient List<Olivar> olivarList;
 
     public Cuadrilla() {
-    }
-
-    @Override
-    public String toString() {
-        return "Cuadrilla{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", supervisorId=" + supervisorId +
-                '}';
     }
 
     public Cuadrilla(int id, String nombre, int supervisorId) {
@@ -64,5 +55,14 @@ public class Cuadrilla {
 
     public List<Olivar> getOlivarList() {
         return olivarList;
+    }
+
+    @Override
+    public String toString() {
+        return "Cuadrilla{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", supervisorId=" + supervisorId +
+                '}';
     }
 }

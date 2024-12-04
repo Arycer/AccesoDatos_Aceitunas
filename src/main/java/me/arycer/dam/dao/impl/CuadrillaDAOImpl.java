@@ -1,182 +1,167 @@
 package me.arycer.dam.dao.impl;
 
-import org.example.conexion.Conexion;
-import org.example.models.Cuadrilla;
+import me.arycer.dam.dao.CuadrillaDAO;
+import me.arycer.dam.database.DBConnection;
+import me.arycer.dam.model.Cuadrilla;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CuadrillaDAO implements org.example.dao.CuadrillaDAO {
+public class CuadrillaDAOImpl implements CuadrillaDAO {
+    private final Connection connection;
 
-    Connection c;
-
-    public CuadrillaDAO() {
-        this.c  = Conexion.getConnection();
+    public CuadrillaDAOImpl() {
+        this.connection = DBConnection.getConnection();
     }
-    //Metodo para meter un dato a la base de datos
+
     @Override
-    public void add(Cuadrilla cuad) {
-        String sql="insert into Cuadrilla (nombre,supervisor_id) values(?,?)";
+    public void add(Cuadrilla cuadrilla) {
+        String sql = "insert into Cuadrilla (nombre,supervisor_id) values(?,?)";
 
-        try(PreparedStatement st = c.prepareStatement(sql)) {
-
-            st.setString(1, cuad.getNombre());
-            st.setInt(2,cuad.getSupervisorId());
-
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, cuadrilla.getNombre());
+            st.setInt(2, cuadrilla.getSupervisorId());
             st.executeUpdate();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-    //Metodo para leer todos los de la base de datos
+
     @Override
     public List<Cuadrilla> read() {
-        List<Cuadrilla> lista= new ArrayList<>();
-        String sql="select * from Cuadrilla";
-        try(Statement st = c.createStatement()){
-            TrabajadorDAO trabajadorDAO = new TrabajadorDAO();
-            OlivarDAO olivarDAO = new OlivarDAO();
+        List<Cuadrilla> lista = new ArrayList<>();
+        String sql = "select * from Cuadrilla";
+
+        try (Statement st = connection.createStatement()) {
             ResultSet rs = st.executeQuery(sql);
 
-            while (rs.next()){
-
-                Cuadrilla cuad = new Cuadrilla(
+            while (rs.next()) {
+                Cuadrilla cuadrilla = new Cuadrilla(
                         rs.getInt(1),
                         rs.getString(2),
-                        rs.getInt(3)/*,
-                        trabajadorDAO.getTrabajadorByCuadId(rs.getInt(1)),
-                        olivarDAO.getOlivarByCuadId(rs.getInt(1))*/
+                        rs.getInt(3)
                 );
-                lista.add(cuad);
+                lista.add(cuadrilla);
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return  lista;
+        return lista;
     }
 
     @Override
     public List<Cuadrilla> getCuadrillasByOlivarId(int id) {
         List<Cuadrilla> lista = new ArrayList<>();
-        String sql="select cuad.* from Cuadrilla cuad,Olivar ol, Cuadrilla_Olivar cuadol where cuadol.cuadrilla_id=cuad.id and cuadol.olivar_id=ol.id and ol.id=?";
-            try(PreparedStatement st = c.prepareStatement(sql)){
-                TrabajadorDAO trabajadorDAO = new TrabajadorDAO();
-                OlivarDAO olivarDAO = new OlivarDAO();
-                st.setInt(1,id);
+        String sql = """
+                select c.*
+                from Cuadrilla c,Olivar o, Cuadrilla_Olivar rel
+                where rel.cuadrilla_id = c.id
+                  and rel.olivar_id = o.id
+                  and o.id = ?
+                """;
 
-                ResultSet rs = st.executeQuery();
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
 
-                while (rs.next()){
-                    Cuadrilla cuad = new Cuadrilla(
-                            rs.getInt(1),
-                            rs.getString(2),
-                            rs.getInt(3)/*,
-                            trabajadorDAO.getTrabajadorByCuadId(rs.getInt(1)),
-                            olivarDAO.getOlivarByCuadId(rs.getInt(1))*/
-                    );
-                    lista.add(cuad);
-                }
+            ResultSet rs = st.executeQuery();
 
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            while (rs.next()) {
+                Cuadrilla cuadrilla = new Cuadrilla(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getInt(3)
+                );
+                lista.add(cuadrilla);
             }
-        return  lista;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return lista;
     }
 
     @Override
     public List<Cuadrilla> getCuadrillasByTrabajadorId(int id) {
         List<Cuadrilla> lista = new ArrayList<>();
-        String sql="select cuad.* from Cuadrilla cuad,Trabajador t, Cuadrilla_Trabajador cuadt where cuadt.cuadrilla_id=cuad.id and cuadt.trabajador_id=t.id and t.id=?";
+        String sql = """
+            select c.*
+            from Cuadrilla c, Trabajador t, Cuadrilla_Trabajador rel
+            where rel.cuadrilla_id = c.id
+              and rel.trabajador_id = t.id
+              and t.id = ?
+            """;
 
-        TrabajadorDAO trabajadorDAO = new TrabajadorDAO();
-        OlivarDAO olivarDAO = new OlivarDAO();
-
-        try(PreparedStatement st = c.prepareStatement(sql)){
-
-            st.setInt(1,id);
-
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
             ResultSet rs = st.executeQuery();
 
-            while (rs.next()){
+            while (rs.next()) {
                 Cuadrilla cuad = new Cuadrilla(
                         rs.getInt(1),
                         rs.getString(2),
                         rs.getInt(3)
-                        /*trabajadorDAO.getTrabajadorByCuadId(rs.getInt(1)),
-                        olivarDAO.getOlivarByCuadId(rs.getInt(1))*/
                 );
                 lista.add(cuad);
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return  lista;
+
+        return lista;
     }
-    //Metodo para actualizar una dato
+
     @Override
-    public void update(Cuadrilla cuad) {
+    public void update(Cuadrilla cuadrilla) {
+        String sql = """
+            UPDATE Cuadrilla SET nombre = ?, supervisor_id = ? WHERE id = ?
+            """;
 
-        String sql="update Cuadrilla nombe=?,supervisor_id=? where id=?";
-
-        try(PreparedStatement st = c.prepareStatement(sql)){
-
-            st.setString(1, cuad.getNombre());
-            st.setInt(2,cuad.getSupervisorId());
-            st.setInt(3,cuad.getId());
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, cuadrilla.getNombre());
+            st.setInt(2, cuadrilla.getSupervisorId());
+            st.setInt(3, cuadrilla.getId());
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
-    //Metodo para borrar un dato
+
     @Override
     public void delete(int id) {
+        String sql = "delete from Cuadrilla where id=?";
 
-        String sql="delete Cuadrilla where id=?";
-
-        try(PreparedStatement st = c.prepareStatement(sql)){
-
-            st.setInt(1,id);
-
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
             st.executeUpdate();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public List<Cuadrilla> getCuadrillasBySupervisorId(int id){
-        List<Cuadrilla> lista= new ArrayList<>();
-        String sql="select * from Cuadrilla where supervisor_id=?";
-        try(PreparedStatement st = c.prepareStatement(sql)){
-            TrabajadorDAO trabajadorDAO = new TrabajadorDAO();
-            OlivarDAO olivarDAO = new OlivarDAO();
-            st.setInt(1,id);
+    @Override
+    public List<Cuadrilla> getCuadrillasBySupervisorId(int id) {
+        List<Cuadrilla> lista = new ArrayList<>();
+        String sql = "select * from Cuadrilla where supervisor_id=?";
 
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
             ResultSet rs = st.executeQuery();
 
-            while (rs.next()){
-
-                Cuadrilla cuad = new Cuadrilla(
+            while (rs.next()) {
+                Cuadrilla cuadrilla = new Cuadrilla(
                         rs.getInt(1),
                         rs.getString(2),
-                        rs.getInt(3)/*,
-                        trabajadorDAO.getTrabajadorByCuadId(rs.getInt(1)),
-                        olivarDAO.getOlivarByCuadId(rs.getInt(1))*/
+                        rs.getInt(3)
                 );
-                lista.add(cuad);
+                lista.add(cuadrilla);
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return  lista;
+        return lista;
     }
 }

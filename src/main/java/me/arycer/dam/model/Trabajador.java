@@ -1,11 +1,10 @@
-package org.example.models;
-
+package me.arycer.dam.model;
 
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.util.List;
+
 @XmlRootElement(name = "Trabjadores")
 public class Trabajador {
     @XmlElement(name = "id")
@@ -19,18 +18,6 @@ public class Trabajador {
     @XmlElement(name = "salario")
     private double salario;
     private transient List<Cuadrilla> lista;
-
-    @Override
-    public String toString() {
-        return "Trabajador{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", edad=" + edad +
-                ", puesto='" + puesto + '\'' +
-                ", salario=" + salario +
-                ", lista=" + lista +
-                '}';
-    }
 
     public Trabajador() {
     }
@@ -59,7 +46,6 @@ public class Trabajador {
         this.salario = salario;
     }
 
-
     public int getId() {
         return id;
     }
@@ -82,5 +68,17 @@ public class Trabajador {
 
     public List<Cuadrilla> getLista() {
         return lista;
+    }
+
+    @Override
+    public String toString() {
+        return "Trabajador{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", edad=" + edad +
+                ", puesto='" + puesto + '\'' +
+                ", salario=" + salario +
+                ", lista=" + lista +
+                '}';
     }
 }
